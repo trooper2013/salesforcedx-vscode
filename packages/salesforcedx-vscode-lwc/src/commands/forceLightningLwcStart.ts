@@ -60,7 +60,7 @@ export class ForceLightningLwcStartExecutor extends SfdxCommandletExecutor<{}> {
   }
 
   public build(): Command {
-    var command =  new SfdxCommandBuilder()
+    let command =  new SfdxCommandBuilder()
                     .withDescription(commandName)
                     .withArg('force:lightning:lwc:start')
                     .withLogName(logName)
@@ -73,7 +73,7 @@ export class ForceLightningLwcStartExecutor extends SfdxCommandletExecutor<{}> {
                     .withArg('force:lightning:lwc:preview')
                     .withFlag('-p', 'iOS')
                     .withFlag('-t',' SFDXSimulator')
-                    .withFlag('-f', this.options.fullUrl!=null ? this.options.fullUrl : '')
+                    .withFlag('-f', this.options.fullUrl != null ? this.options.fullUrl : '')
                     .build();
 
     } else if (this.options.platform === PlatformType.Android) {
@@ -82,9 +82,9 @@ export class ForceLightningLwcStartExecutor extends SfdxCommandletExecutor<{}> {
                     .withArg('force:lightning:lwc:preview')
                     .withFlag('-p', 'Android')
                     .withFlag('-t', 'SFDXEmulator')
-                    .withFlag('-f',  this.options.fullUrl!=null ? this.options.fullUrl : '')
+                    .withFlag('-f',  this.options.fullUrl != null ? this.options.fullUrl : '')
                     .build();
-    } 
+    }
 
     return command;
   }

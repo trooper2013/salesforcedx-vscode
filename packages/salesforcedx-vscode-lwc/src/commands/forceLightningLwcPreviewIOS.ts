@@ -35,7 +35,6 @@ const commandName = nls.localize('force_lightning_lwc_preview_ios_text');
 
 export async function forceLightningLwcPreviewIOS(sourceUri: vscode.Uri) {
   const startTime = process.hrtime();
- 
   if (!sourceUri) {
     const message = nls.localize(
       'force_lightning_lwc_preview_file_undefined',
