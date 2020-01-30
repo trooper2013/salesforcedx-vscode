@@ -35,30 +35,58 @@ const SfdxCommandletExecutor = sfdxCoreExports.SfdxCommandletExecutor;
 const logName = 'force_lightning_lwc_start';
 const commandName = nls.localize(`force_lightning_lwc_start_text`);
 
+export enum PlatformType {
+  Desktop = 1,
+  iOS,
+  Android
+}
+
 export interface ForceLightningLwcStartOptions {
   /** whether to automatically open the browser after server start */
   openBrowser: boolean;
   /** complete url of the page to open in the browser */
   fullUrl?: string;
+
+  platform: PlatformType;
+
 }
 
 export class ForceLightningLwcStartExecutor extends SfdxCommandletExecutor<{}> {
   private readonly options: ForceLightningLwcStartOptions;
 
-  constructor(options: ForceLightningLwcStartOptions = { openBrowser: true }) {
+  constructor(options: ForceLightningLwcStartOptions = { openBrowser: true, platform: PlatformType.Desktop }) {
     super();
     this.options = options;
   }
 
   public build(): Command {
-    return (
-      new SfdxCommandBuilder()
-        .withDescription(commandName)
-        .withArg('force:lightning:lwc:start')
-        .withLogName(logName)
-        // .withJson()
-        .build()
-    );
+    var command =  new SfdxCommandBuilder()
+                    .withDescription(commandName)
+                    .withArg('force:lightning:lwc:start')
+                    .withLogName(logName)
+                    // .withJson()
+                    .build();
+
+    if (this.options.platform == PlatformType.iOS) {
+        command = new SfdxCommandBuilder()
+                      .withDescription(commandName)
+                      .withArg('force:lightning:lwc:preview')
+                      .withFlag('-p','iOS')
+                      .withFlag('-t','SFDXSimulator')
+                      .withFlag('-f',this.options.fullUrl!=null?this.options.fullUrl:"")
+                      .build();
+
+    } else if (this.options.platform == PlatformType.Android) {
+       command = new SfdxCommandBuilder()
+                .withDescription(commandName)
+                .withArg('force:lightning:lwc:preview')
+                .withFlag('-p','Android')
+                .withFlag('-t','SFDXEmulator')
+                .withFlag('-f',this.options.fullUrl!=null?this.options.fullUrl:"")
+                .build();
+    } 
+
+    return command;
   }
 
   public execute(response: ContinueResponse<{}>): void {

@@ -5,6 +5,12 @@
  * For full license text, see LICENSE.txt file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
 
+import {
+  CliCommandExecutor,
+  Command,
+  SfdxCommandBuilder
+} from '@salesforce/salesforcedx-utils-vscode/out/src/cli';
+
 import * as fs from 'fs';
 import { componentUtil } from 'lightning-lsp-common';
 import * as vscode from 'vscode';
@@ -24,11 +30,12 @@ const {
   SfdxWorkspaceChecker
 } = sfdxCoreExports;
 
-const logName = 'force_lightning_lwc_preview';
-const commandName = nls.localize('force_lightning_lwc_preview_text');
+const logName = 'force_lightning_lwc_preview_ios';
+const commandName = nls.localize('force_lightning_lwc_preview_ios_text');
 
-export async function forceLightningLwcPreview(sourceUri: vscode.Uri) {
+export async function forceLightningLwcPreviewIOS(sourceUri: vscode.Uri) {
   const startTime = process.hrtime();
+ 
   if (!sourceUri) {
     const message = nls.localize(
       'force_lightning_lwc_preview_file_undefined',
@@ -72,21 +79,13 @@ export async function forceLightningLwcPreview(sourceUri: vscode.Uri) {
   }
 
   const fullUrl = `${DEV_SERVER_PREVIEW_ROUTE}/${componentName}`;
-  if (DevServerService.instance.isServerHandlerRegistered()) {
-    try {
-      await openBrowser(fullUrl);
-      telemetryService.sendCommandEvent(logName, startTime);
-    } catch (e) {
-      showError(e, logName, commandName);
-    }
-  } else {
     console.log(`${logName}: server was not running, starting...`);
     const preconditionChecker = new SfdxWorkspaceChecker();
     const parameterGatherer = new EmptyParametersGatherer();
     const executor = new ForceLightningLwcStartExecutor({
-      openBrowser: true,
+      openBrowser: false,
       fullUrl,
-      platform: PlatformType.Desktop
+      platform: PlatformType.iOS
     });
 
     const commandlet = new SfdxCommandlet(
@@ -97,5 +96,5 @@ export async function forceLightningLwcPreview(sourceUri: vscode.Uri) {
 
     await commandlet.run();
     telemetryService.sendCommandEvent(logName, startTime);
-  }
+
 }

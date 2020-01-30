@@ -33,6 +33,10 @@ export const messages = {
   force_lightning_lwc_stop_in_progress: 'ローカルの開発サーバを停止しています',
   force_lightning_lwc_preview_text:
     'SFDX: コンポーネントをローカルでプレビュー',
+    force_lightning_lwc_preview_ios_text:
+    'SFDX: コンポーネントをローカルでプレビュー',
+    force_lightning_lwc_preview_android_text:
+    'SFDX: コンポーネントをローカルでプレビュー',
   force_lightning_lwc_preview_file_undefined:
     'Lightning Web Component モジュールが見つかりません。ファイルパス %s が正しいか確認してください。',
   force_lightning_lwc_preview_file_nonexist:

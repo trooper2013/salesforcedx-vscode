@@ -107,6 +107,14 @@
         {
           "command": "sfdx.force.lightning.lwc.preview",
           "when": "sfdx:project_opened && resource =~ /.*/lwc/[^/]+(/[^/]+\\.(html|css|js))?$/"
+        },
+        {
+          "command": "sfdx.force.lightning.lwc.preview.ios",
+          "when": "sfdx:project_opened && resource =~ /.*/lwc/[^/]+(/[^/]+\\.(html|css|js))?$/"
+        },
+        {
+          "command": "sfdx.force.lightning.lwc.preview.android",
+          "when": "sfdx:project_opened && resource =~ /.*/lwc/[^/]+(/[^/]+\\.(html|css|js))?$/"
         }
       ],
       "editor/title": [
@@ -134,6 +142,14 @@
       "editor/title/context": [
         {
           "command": "sfdx.force.lightning.lwc.preview",
+          "when": "sfdx:project_opened && resource =~ /.*/lwc/[^/]+(/[^/]+\\.(html|css|js))?$/"
+        },
+        {
+          "command": "sfdx.force.lightning.lwc.preview.ios",
+          "when": "sfdx:project_opened && resource =~ /.*/lwc/[^/]+(/[^/]+\\.(html|css|js))?$/"
+        },
+        {
+          "command": "sfdx.force.lightning.lwc.preview.android",
           "when": "sfdx:project_opened && resource =~ /.*/lwc/[^/]+(/[^/]+\\.(html|css|js))?$/"
         }
       ],
@@ -179,6 +195,14 @@
         {
           "command": "sfdx.force.lightning.lwc.preview",
           "when": "sfdx:project_opened && resource =~ /.*/lwc/[^/]+(/[^/]+\\.(html|css|js))?$/"
+        },
+        {
+          "command": "sfdx.force.lightning.lwc.preview.ios",
+          "when": "sfdx:project_opened && resource =~ /.*/lwc/[^/]+(/[^/]+\\.(html|css|js))?$/"
+        },
+        {
+          "command": "sfdx.force.lightning.lwc.preview.android",
+          "when": "sfdx:project_opened && resource =~ /.*/lwc/[^/]+(/[^/]+\\.(html|css|js))?$/"
         }
       ],
       "commandPalette": [
@@ -196,6 +220,14 @@
         },
         {
           "command": "sfdx.force.lightning.lwc.preview",
+          "when": "false"
+        },
+        {
+          "command": "sfdx.force.lightning.lwc.preview.ios",
+          "when": "false"
+        },
+        {
+          "command": "sfdx.force.lightning.lwc.preview.android",
           "when": "false"
         },
         {
@@ -256,6 +288,14 @@
       {
         "command": "sfdx.force.lightning.lwc.open",
         "title": "%force_lightning_lwc_open_text%"
+      },
+      {
+        "command": "sfdx.force.lightning.lwc.preview.ios",
+        "title": "%force_lightning_lwc_preview_ios_text%"
+      },
+      {
+        "command": "sfdx.force.lightning.lwc.preview.android",
+        "title": "%force_lightning_lwc_preview_android_text%"
       },
       {
         "command": "sfdx.force.lightning.lwc.preview",

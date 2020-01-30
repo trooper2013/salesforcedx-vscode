@@ -24,11 +24,12 @@ const {
   SfdxWorkspaceChecker
 } = sfdxCoreExports;
 
-const logName = 'force_lightning_lwc_preview';
-const commandName = nls.localize('force_lightning_lwc_preview_text');
+const logName = 'force_lightning_lwc_preview_android';
+const commandName = nls.localize('force_lightning_lwc_preview_android_text');
 
-export async function forceLightningLwcPreview(sourceUri: vscode.Uri) {
+export async function forceLightningLwcPreviewAndroid(sourceUri: vscode.Uri) {
   const startTime = process.hrtime();
+
   if (!sourceUri) {
     const message = nls.localize(
       'force_lightning_lwc_preview_file_undefined',
@@ -72,21 +73,13 @@ export async function forceLightningLwcPreview(sourceUri: vscode.Uri) {
   }
 
   const fullUrl = `${DEV_SERVER_PREVIEW_ROUTE}/${componentName}`;
-  if (DevServerService.instance.isServerHandlerRegistered()) {
-    try {
-      await openBrowser(fullUrl);
-      telemetryService.sendCommandEvent(logName, startTime);
-    } catch (e) {
-      showError(e, logName, commandName);
-    }
-  } else {
     console.log(`${logName}: server was not running, starting...`);
     const preconditionChecker = new SfdxWorkspaceChecker();
     const parameterGatherer = new EmptyParametersGatherer();
     const executor = new ForceLightningLwcStartExecutor({
-      openBrowser: true,
+      openBrowser: false,
       fullUrl,
-      platform: PlatformType.Desktop
+      platform: PlatformType.Android
     });
 
     const commandlet = new SfdxCommandlet(
@@ -97,5 +90,4 @@ export async function forceLightningLwcPreview(sourceUri: vscode.Uri) {
 
     await commandlet.run();
     telemetryService.sendCommandEvent(logName, startTime);
-  }
 }
