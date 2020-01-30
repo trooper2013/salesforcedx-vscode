@@ -79,22 +79,21 @@ export async function forceLightningLwcPreviewIOS(sourceUri: vscode.Uri) {
   }
 
   const fullUrl = `${DEV_SERVER_PREVIEW_ROUTE}/${componentName}`;
-    console.log(`${logName}: server was not running, starting...`);
-    const preconditionChecker = new SfdxWorkspaceChecker();
-    const parameterGatherer = new EmptyParametersGatherer();
-    const executor = new ForceLightningLwcStartExecutor({
-      openBrowser: false,
-      fullUrl,
-      platform: PlatformType.iOS
-    });
+  console.log(`${logName}: server was not running, starting...`);
+  const preconditionChecker = new SfdxWorkspaceChecker();
+  const parameterGatherer = new EmptyParametersGatherer();
+  const executor = new ForceLightningLwcStartExecutor({
+    openBrowser: false,
+    fullUrl,
+    platform: PlatformType.iOS
+  });
 
-    const commandlet = new SfdxCommandlet(
-      preconditionChecker,
-      parameterGatherer,
-      executor
-    );
+  const commandlet = new SfdxCommandlet(
+    preconditionChecker,
+    parameterGatherer,
+    executor
+  );
 
-    await commandlet.run();
-    telemetryService.sendCommandEvent(logName, startTime);
-
+  await commandlet.run();
+  telemetryService.sendCommandEvent(logName, startTime);
 }

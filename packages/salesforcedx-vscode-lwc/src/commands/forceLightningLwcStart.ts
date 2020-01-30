@@ -67,23 +67,23 @@ export class ForceLightningLwcStartExecutor extends SfdxCommandletExecutor<{}> {
                     // .withJson()
                     .build();
 
-    if (this.options.platform == PlatformType.iOS) {
+    if (this.options.platform === PlatformType.iOS) {
         command = new SfdxCommandBuilder()
-                      .withDescription(commandName)
-                      .withArg('force:lightning:lwc:preview')
-                      .withFlag('-p','iOS')
-                      .withFlag('-t','SFDXSimulator')
-                      .withFlag('-f',this.options.fullUrl!=null?this.options.fullUrl:"")
-                      .build();
+                    .withDescription(commandName)
+                    .withArg('force:lightning:lwc:preview')
+                    .withFlag('-p', 'iOS')
+                    .withFlag('-t',' SFDXSimulator')
+                    .withFlag('-f', this.options.fullUrl!=null ? this.options.fullUrl : '')
+                    .build();
 
-    } else if (this.options.platform == PlatformType.Android) {
+    } else if (this.options.platform === PlatformType.Android) {
        command = new SfdxCommandBuilder()
-                .withDescription(commandName)
-                .withArg('force:lightning:lwc:preview')
-                .withFlag('-p','Android')
-                .withFlag('-t','SFDXEmulator')
-                .withFlag('-f',this.options.fullUrl!=null?this.options.fullUrl:"")
-                .build();
+                    .withDescription(commandName)
+                    .withArg('force:lightning:lwc:preview')
+                    .withFlag('-p', 'Android')
+                    .withFlag('-t', 'SFDXEmulator')
+                    .withFlag('-f',  this.options.fullUrl!=null ? this.options.fullUrl : '')
+                    .build();
     } 
 
     return command;
