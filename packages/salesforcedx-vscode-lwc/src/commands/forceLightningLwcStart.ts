@@ -72,7 +72,7 @@ export class ForceLightningLwcStartExecutor extends SfdxCommandletExecutor<{}> {
                     .withDescription(commandName)
                     .withArg('force:lightning:lwc:preview')
                     .withFlag('-p', 'iOS')
-                    .withFlag('-t',' SFDXSimulator')
+                    .withFlag('-t', 'SFDXSimulator')
                     .withFlag('-f', this.options.fullUrl != null ? this.options.fullUrl : '')
                     .build();
 
