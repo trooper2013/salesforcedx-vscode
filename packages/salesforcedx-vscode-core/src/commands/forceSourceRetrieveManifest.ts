@@ -22,8 +22,7 @@ import {
 } from './util';
 
 export class ForceSourceRetrieveManifestExecutor extends SfdxCommandletExecutor<
-  string
-> {
+  string> {
   public build(manifestPath: string): Command {
     return new SfdxCommandBuilder()
       .withDescription(nls.localize('force_source_retrieve_text'))

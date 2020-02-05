@@ -24,8 +24,6 @@ import {
 import {
   forceLightningLwcOpen,
   forceLightningLwcPreview,
-  forceLightningLwcPreviewAndroid,
-  forceLightningLwcPreviewIOS,
   forceLightningLwcStart,
   forceLightningLwcStop
 } from './commands';
@@ -135,14 +133,6 @@ function registerCommands(
     vscode.commands.registerCommand(
       'sfdx.force.lightning.lwc.open',
       forceLightningLwcOpen
-    ),
-    vscode.commands.registerCommand(
-      'sfdx.force.lightning.lwc.preview.ios',
-      forceLightningLwcPreviewIOS
-    ),
-    vscode.commands.registerCommand(
-      'sfdx.force.lightning.lwc.preview.android',
-      forceLightningLwcPreviewAndroid
     ),
     vscode.commands.registerCommand(
       'sfdx.force.lightning.lwc.preview',
