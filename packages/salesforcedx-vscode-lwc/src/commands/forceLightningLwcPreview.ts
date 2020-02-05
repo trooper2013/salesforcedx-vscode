@@ -4,7 +4,8 @@
  * Licensed under the BSD 3-Clause license.
  * For full license text, see LICENSE.txt file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
-
+import { CliCommandExecutor, Command, SfdxCommandBuilder } from '@salesforce/salesforcedx-utils-vscode/out/src/cli';
+import { ContinueResponse } from '@salesforce/salesforcedx-utils-vscode/out/src/types';
 import * as fs from 'fs';
 import { componentUtil } from 'lightning-lsp-common';
 import * as vscode from 'vscode';
@@ -13,13 +14,6 @@ import { DevServerService } from '../service/devServerService';
 import { DEV_SERVER_PREVIEW_ROUTE } from './commandConstants';
 import { openBrowser, showError } from './commandUtils';
 import { ForceLightningLwcStartExecutor, PlatformType } from './forceLightningLwcStart';
-import { ContinueResponse } from '@salesforce/salesforcedx-utils-vscode/out/src/types';
-import { url } from 'inspector';
-import {
-  CliCommandExecutor,
-  Command,
-  SfdxCommandBuilder
-} from '@salesforce/salesforcedx-utils-vscode/out/src/cli';
 
 const sfdxCoreExports = vscode.extensions.getExtension(
   'salesforce.salesforcedx-vscode-core'
@@ -31,7 +25,6 @@ const {
   EmptyParametersGatherer,
   SfdxWorkspaceChecker
 } = sfdxCoreExports;
-
 
 const logName = 'force_lightning_lwc_preview';
 const commandName = nls.localize('force_lightning_lwc_preview_text');
@@ -49,19 +42,14 @@ interface PreviewQuickPickItem extends vscode.QuickPickItem {
 }
 
 const platformInput: PreviewQuickPickItem[] = [
-  { label: "Use Desktop Browser", detail: "Preview Component On Desktop Browser", alwaysShow: true, picked:true, id: PreviewPlatformType.Desktop, defaultTargetName: ""},
-  { label: "Use iOS Simulator", detail: "Preview Component On iOS", alwaysShow: true, picked:false, id: PreviewPlatformType.iOS, defaultTargetName: "SFDXSimulator"},
-  { label: "Use Android Emulator", detail: "Preview Component On Android", alwaysShow: true, picked:false, id: PreviewPlatformType.Android, defaultTargetName: "SFDXEmulator"}
+  { label: 'Use Desktop Browser', detail: 'Preview Component On Desktop Browser', alwaysShow: true, picked: true, id: PreviewPlatformType.Desktop, defaultTargetName: ''},
+  { label: 'Use iOS Simulator', detail: 'Preview Component On iOS', alwaysShow: true, picked: false, id: PreviewPlatformType.iOS, defaultTargetName: 'SFDXSimulator'},
+  { label: 'Use Android Emulator', detail: 'Preview Component On Android', alwaysShow: true, picked: false, id: PreviewPlatformType.Android, defaultTargetName: 'SFDXEmulator'}
 
 ];
 
-// const targetInput: PreviewQuickPickItem[] = [
-//   { label: "PlaceHolder", detail: "Select this as default name for the target.", alwaysShow: true,  picked:true, id: PreviewPlatformType.iOS , defaultTargetName: ""}
-// ];
-
-
 export async function forceLightningLwcPreview(sourceUri: vscode.Uri) {
-  
+
   const startTime = process.hrtime();
   if (!sourceUri) {
     const message = nls.localize(
@@ -96,7 +84,7 @@ export async function forceLightningLwcPreview(sourceUri: vscode.Uri) {
   const componentName = isDirectory
     ? componentUtil.moduleFromDirectory(resourcePath, isSFDX)
     : componentUtil.moduleFromFile(resourcePath, isSFDX);
- 
+
   if (!componentName) {
     const message = nls.localize(
       'force_lightning_lwc_preview_unsupported',
@@ -106,7 +94,6 @@ export async function forceLightningLwcPreview(sourceUri: vscode.Uri) {
     return;
   }
 
-  
   const platFormSelection = await vscode.window.showQuickPick(platformInput, {
     placeHolder: 'Select the platform to preview the component?'
   });
@@ -115,32 +102,30 @@ export async function forceLightningLwcPreview(sourceUri: vscode.Uri) {
     console.log(`${logName}: No valid selection made for preview...`);
     return;
   }
-  //targetInput[0].defaultTargetName = platFormSelection.defaultTargetName;
-  
+
   const fullUrl = `${DEV_SERVER_PREVIEW_ROUTE}/${componentName}`;
 
-  if (platFormSelection.id === PreviewPlatformType.Desktop) {  
+  if (platFormSelection.id === PreviewPlatformType.Desktop) {
     await handleDesktop(fullUrl, startTime);
   } else {
-    
-    var targetName = await vscode.window.showInputBox({
-      placeHolder: "Enter or Select the name for the target here. Leave Blank for Default."
+    let targetName = await vscode.window.showInputBox({
+      placeHolder: 'Enter or Select the name for the target here. Leave Blank for Default.'
     });
-  
+
     if (!targetName) {
       targetName = platFormSelection.defaultTargetName;
     }
-    
+
     if (platFormSelection.id === PreviewPlatformType.iOS) {
       await handleiOS(fullUrl, startTime, targetName);
     } else if (platFormSelection.id === PreviewPlatformType.Android) {
       await handleAndroid(fullUrl, startTime, targetName);
-    } 
+    }
 
   }
 
 }
- 
+
 async function handleDesktop(fullUrl: string, startTime: [number, number]) {
   if (DevServerService.instance.isServerHandlerRegistered()) {
     try {
@@ -170,20 +155,9 @@ async function handleDesktop(fullUrl: string, startTime: [number, number]) {
   }
 }
 
-
 async function handleiOS(fullUrl: string, startTime: [number, number], targetName: string) {
-  
-
-  // const executor = new MobileLwcStartExecutor(PreviewPlatformType.iOS, "SFDXSimulator");
-  // const preconditionChecker = new SfdxWorkspaceChecker();
-  // const parameterGatherer = new EmptyParametersGatherer();
-  // const commandlet = new SfdxCommandlet(
-  //   preconditionChecker,
-  //   parameterGatherer,
-  //   executor
-  // );
   console.log(`${logName}: server was not running, starting...`);
-  let command = new SfdxCommandBuilder()
+  const command = new SfdxCommandBuilder()
                     .withDescription(commandName)
                     .withArg('force:lightning:lwc:preview')
                     .withFlag('-p', 'iOS')
@@ -191,7 +165,6 @@ async function handleiOS(fullUrl: string, startTime: [number, number], targetNam
                     .withFlag('-f', fullUrl != null ? fullUrl : '')
                     .build();
 
-
   const cancellationTokenSource = new vscode.CancellationTokenSource();
   const cancellationToken = cancellationTokenSource.token;
 
@@ -199,26 +172,11 @@ async function handleiOS(fullUrl: string, startTime: [number, number], targetNam
     env: { SFDX_JSON_TO_STDOUT: 'true' }
   });
   executor.execute(cancellationToken);
-  // const commandlet = new SfdxCommandlet(
-  //   executor
-  // );
-  //await commandlet.run();
 }
 
-
 async function handleAndroid(fullUrl: string, startTime: [number, number], targetName: string) {
-  //const executor = new MobileLwcStartExecutor(PreviewPlatformType.Android, "SFDXEmulator");
-
-  // const preconditionChecker = new SfdxWorkspaceChecker();
-  // const parameterGatherer = new EmptyParametersGatherer();
-
-  // const commandlet = new SfdxCommandlet(
-  //   preconditionChecker,
-  //   parameterGatherer,
-  //   executor
-  // );
   console.log(`${logName}: server was not running, starting...`);
-  let command = new SfdxCommandBuilder()
+  const command = new SfdxCommandBuilder()
                     .withDescription(commandName)
                     .withArg('force:lightning:lwc:preview')
                     .withFlag('-p', 'Android')
@@ -226,7 +184,6 @@ async function handleAndroid(fullUrl: string, startTime: [number, number], targe
                     .withFlag('-f', fullUrl != null ? fullUrl : '')
                     .build();
 
-
   const cancellationTokenSource = new vscode.CancellationTokenSource();
   const cancellationToken = cancellationTokenSource.token;
 
@@ -234,15 +191,6 @@ async function handleAndroid(fullUrl: string, startTime: [number, number], targe
     env: { SFDX_JSON_TO_STDOUT: 'true' }
   });
   executor.execute(cancellationToken);
-
-  // const executor = new CliCommandExecutor(command, {
-  //   env: { SFDX_JSON_TO_STDOUT: 'true' }
-  // });
-  // // const commandlet = new SfdxCommandlet(
-  // //   executor
-  // // );
-  //  await commandlet.run();
-  
 }
 
 export class MobileLwcStartExecutor extends SfdxCommandletExecutor<{}> {
@@ -286,7 +234,7 @@ export class MobileLwcStartExecutor extends SfdxCommandletExecutor<{}> {
   }
 
   public execute(response: ContinueResponse<{}>): void {
-    
+
     const startTime = process.hrtime();
     const cancellationTokenSource = new vscode.CancellationTokenSource();
     const cancellationToken = cancellationTokenSource.token;
