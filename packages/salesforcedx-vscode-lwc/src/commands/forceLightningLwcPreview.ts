@@ -6,8 +6,9 @@
  */
 import { CliCommandExecutor, Command, SfdxCommandBuilder } from '@salesforce/salesforcedx-utils-vscode/out/src/cli';
 import { ContinueResponse } from '@salesforce/salesforcedx-utils-vscode/out/src/types';
+
+import { componentUtil } from '@salesforce/lightning-lsp-common';
 import * as fs from 'fs';
-import { componentUtil } from 'lightning-lsp-common';
 import * as vscode from 'vscode';
 import { nls } from '../messages';
 import { DevServerService } from '../service/devServerService';

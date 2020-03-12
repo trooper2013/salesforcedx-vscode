@@ -7,6 +7,8 @@
 
 import * as vscode from 'vscode';
 import {
+  BETA_DEPLOY_RETRIEVE,
+  CONFLICT_DETECTION_ENABLED,
   INTERNAL_DEVELOPMENT_FLAG,
   PUSH_OR_DEPLOY_ON_SAVE_ENABLED,
   RETRIEVE_TEST_CODE_COVERAGE,
@@ -62,6 +64,14 @@ export class SfdxCoreSettings {
 
   public getInternalDev(): boolean {
     return this.getConfigValue(INTERNAL_DEVELOPMENT_FLAG, false);
+  }
+
+  public getConflictDetectionEnabled(): boolean {
+    return this.getConfigValue(CONFLICT_DETECTION_ENABLED, false);
+  }
+
+  public getBetaDeployRetrieve(): boolean {
+    return this.getConfigValue(BETA_DEPLOY_RETRIEVE, false);
   }
 
   private getConfigValue<T>(key: string, defaultValue: T): T {
